@@ -10,6 +10,18 @@ app.use(cors());
 
 app.use(express.json());
 
+const connectDB = require("./config/db");
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (e) {
+        next(e);
+    }
+});
+
+app.get("/", (req, res) => res.json({ message: "API running" }));
+
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/applications", applicationRoutes);
